@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<Devices>
+	<Device type="relay" id="myPiHoleType">
+		<Name>PiHole DNS Server</Name>
+		<ConfigUI>
+			<Field id="address" type="textfield" defaultValue="192.168.0.254">
+				<Label>Pi Hole Server IP Address:</Label>
+			</Field>
+				<Field id="password" type="textfield">
+				<Label>Pi Hole Server Webpassword token (optional; see /etc/pihole/setupVars.conf):</Label>
+			</Field>
+		</ConfigUI>
+	</Device>
+</Devices>
