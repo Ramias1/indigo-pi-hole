@@ -104,8 +104,17 @@ class Plugin(indigo.PluginBase):
 		###### TOGGLE ######
 		elif action.deviceAction == indigo.kDeviceAction.Toggle:
 			# Command hardware module (dev) to toggle here:
-			newOnState = not dev.onState
-			sendSuccess = True		# Set to False if it failed.
+			if dev.onState == True:
+				url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?disable&auth=" + dev.pluginProps["password"]
+				response = requests.get(url)
+				newOnState = not dev.onState
+				sendSuccess = True		# Set to False if it failed.
+
+			elif dev.onState == False:
+				url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?enable&auth=" + dev.pluginProps["password"]
+				response = requests.get(url)
+				newOnState = not dev.onState
+				sendSuccess = True		# Set to False if it failed.
 
 			if sendSuccess:
 				# If success then log that the command was successfully sent.
