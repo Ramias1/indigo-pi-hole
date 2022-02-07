@@ -129,7 +129,7 @@ class Plugin(indigo.PluginBase):
 	def udpateStatus(self, dev):
 		self.debugLog(u"Sent \"%s\" %s" % (dev.name, "status request"))
 		try:
-			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?status&auth=" + dev.pluginProps["password"]
+			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php&auth=" + dev.pluginProps["password"]
 			r = requests.get(url)
 			if "enabled" in r.text:
 				self.debugLog(u"PiHole is Enabled")
