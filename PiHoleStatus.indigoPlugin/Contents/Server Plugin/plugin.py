@@ -10,8 +10,7 @@ import os
 import sys
 import time
 
-import urllib2
-import requests
+import urllib.request
 
 # Note the "indigo" module is automatically imported and made available inside
 # our global name space by the host process.
@@ -72,7 +71,7 @@ class Plugin(indigo.PluginBase):
 		###### TURN ON ######
 		if action.deviceAction == indigo.kDeviceAction.TurnOn:
 			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?enable&auth=" + dev.pluginProps["password"]
-			response = requests.get(url)
+			response = urllib.request.urlopen(url)
 			sendSuccess = True		# Set to False if it failed.
 
 			if sendSuccess:
@@ -88,7 +87,7 @@ class Plugin(indigo.PluginBase):
 		###### TURN OFF ######
 		elif action.deviceAction == indigo.kDeviceAction.TurnOff:
 			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?disable&auth=" + dev.pluginProps["password"]
-			response = requests.get(url)
+			response = urllib.request.urlopen(url)
 			sendSuccess = True		# Set to False if it failed.
 
 			if sendSuccess:
@@ -106,13 +105,13 @@ class Plugin(indigo.PluginBase):
 			# Command hardware module (dev) to toggle here:
 			if dev.onState == True:
 				url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?disable&auth=" + dev.pluginProps["password"]
-				response = requests.get(url)
+				response = urllib.request.urlopen(url).read().decode('utf-8')
 				newOnState = not dev.onState
 				sendSuccess = True		# Set to False if it failed.
 
 			elif dev.onState == False:
 				url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?enable&auth=" + dev.pluginProps["password"]
-				response = requests.get(url)
+				response = urllib.request.urlopen(url).read().decode('utf-8')
 				newOnState = not dev.onState
 				sendSuccess = True		# Set to False if it failed.
 
@@ -129,12 +128,13 @@ class Plugin(indigo.PluginBase):
 	def udpateStatus(self, dev):
 		self.debugLog(u"Sent \"%s\" %s" % (dev.name, "status request"))
 		try:
-			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php?status&auth=" + dev.pluginProps["password"]
-			r = requests.get(url)
-			if "enabled" in r.text:
+			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php" + dev.pluginProps["password"]
+			r = urllib.request.urlopen(url).read().decode('utf-8')
+			self.debugLog(u"data %s" % (r))
+			if "enabled" in r:
 				self.debugLog(u"PiHole is Enabled")
 				response = "on"
-			elif "disabled" in r.text:
+			elif "disabled" in r:
 				self.debugLog(u"PiHole is Disabled")
 				response = "off"
 			dev.updateStateOnServer("onOffState", response)
