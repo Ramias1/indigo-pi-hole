@@ -128,7 +128,8 @@ class Plugin(indigo.PluginBase):
 	def udpateStatus(self, dev):
 		self.debugLog(u"Sent \"%s\" %s" % (dev.name, "status request"))
 		try:
-			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php" + dev.pluginProps["password"]
+			url = u"http://" + dev.pluginProps["address"] + "/admin/api.php"
+			self.debugLog(u"Calling URL %s" % (url))
 			r = urllib.request.urlopen(url).read().decode('utf-8')
 			self.debugLog(u"data %s" % (r))
 			if "enabled" in r:
